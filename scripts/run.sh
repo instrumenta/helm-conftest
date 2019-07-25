@@ -7,4 +7,4 @@ fi
 
 render=$(helm template ${1:-.})
 
-echo "$render" | $HELM_PLUGIN_DIR/bin/contest test - ${@:2}
+echo "$render" | $HELM_PLUGIN_DIR/bin/conftest test - ${@:2}
