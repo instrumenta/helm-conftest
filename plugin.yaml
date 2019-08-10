@@ -1,5 +1,5 @@
 name: "conftest"
-version: "0.10.0"
+version: "0.11.0"
 usage: "Test Helm Charts"
 description: |-
   "Test your Helm Charts with Open Policy Agent"
@@ -9,4 +9,5 @@ hooks:
   install: "cd $HELM_PLUGIN_DIR; ./scripts/install.sh"
   update: "cd $HELM_PLUGIN_DIR; ./scripts/install.sh"
 
+ignoreFlags: false
 useTunnel: false
