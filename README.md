@@ -15,5 +15,5 @@ helm plugin install https://github.com/instrumenta/helm-conftest
 ## Usage
 
 ```
-helm conftest <path-to-chart>
+helm conftest
 ```
