@@ -1,10 +1,37 @@
 #! /bin/bash -e
 
-if [[ $1 == "--version" || $1 == "--help" ]]; then
-    $HELM_PLUGIN_DIR/bin/conftest $1
-    exit
-fi
+helm_options=()
+conftest_options=()
+eoo=0
 
-render=$(helm template .)
+while [[ $1 ]]
+do
+    if ! ((eoo)); then
+        case "$1" in
+            --version|--help)
+                $HELM_PLUGIN_DIR/bin/conftest test $1
+                exit
+                ;;
+            --debug|--no-color|--trace|--update|--fail-on-warn)
+                conftest_options+=("$1")
+                shift
+                ;;
+            --output|-o|--namespace|--policy|-p)
+                conftest_options+=("$1")
+                conftest_options+=("$2")
+                shift 2
+                ;;
+            *)
+                helm_options+=("$1")
+                shift
+                ;;
+        esac
+    else
+        helm_options+=("$1")
+        shift
+    fi
+done
 
-echo "$render" | $HELM_PLUGIN_DIR/bin/conftest test - ${@}
+render=$(helm template "${helm_options[@]}")
+
+echo "$render" | $HELM_PLUGIN_DIR/bin/conftest test - "${conftest_options[@]}"
