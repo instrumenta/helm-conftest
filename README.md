@@ -32,3 +32,11 @@ helm conftest charts/stable/nginx-ingress --set controller.image.tag=latest
 ```
 
 
+## Docker
+
+The Helm Conftest plugin is also available as a standalone Docker image. Simply mount your Chart source
+code at `/chart` and include the `policy` dirctory along with your chart and run:
+
+```
+docker run --rm -it -v $(pwd)/snyky:/chart instrumenta/helm-conftest
+```
