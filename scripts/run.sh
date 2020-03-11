@@ -1,5 +1,7 @@
 #! /bin/bash -e
 
+HELM_BIN="${HELM_BIN:-helm}"
+
 helm_options=()
 conftest_options=()
 eoo=0
@@ -32,6 +34,6 @@ do
     fi
 done
 
-render=$(helm template "${helm_options[@]}")
+render=$(${HELM_BIN} template "${helm_options[@]}")
 
 echo "$render" | $HELM_PLUGIN_DIR/bin/conftest test - "${conftest_options[@]}"
