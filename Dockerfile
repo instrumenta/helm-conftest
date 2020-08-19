@@ -1,4 +1,4 @@
-FROM alpine/helm
+FROM alpine/helm:3.2.4
 
 ENV HELM_HOME /root/.helm
 
