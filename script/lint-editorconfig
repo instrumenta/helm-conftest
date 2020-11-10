@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source script/util.sh
+
+main() {
+	log::header 'Diagnostics'
+	log::exec_command editorconfig --version
+
+	log::header 'Checking Files'
+
+	if [ ! -f .editorconfig ]; then
+		log::error "No .editorconfig file."
+		return 1
+	fi
+
+	log::indicator 'Generating Files'
+
+	local editorconfig_files ignore_file
+	editorconfig_files="$(mktemp)"
+	ignore_file="$(mktemp)"
+
+	# XXX: these files are tracked by git and should always be excluded
+	cat <<EOF >"${ignore_file}"
+.editorconfig
+.editorconfigignore
+.gitmodules
+.gitattributes
+EOF
+
+	if [ $# -eq 0 ]; then
+		comm -2 -3 \
+			<(git ls-files) \
+			<(git ls-files --ignored -X "${ignore_file}" | sort) >"${editorconfig_files}"
+	else
+		comm -2 -3 \
+			<(echo "$@" | tr ' ' '\n' | sort) \
+			<(git ls-files --ignored -X "${ignore_file}" | sort) >"${editorconfig_files}"
+	fi
+
+	log::indicator "Running Tests"
+
+	local counter=1 failures=0 successes=0
+
+	total="$(wc -l "${editorconfig_files}" | sed 's/^[[:space:]]+//' | cut -d ' ' -f 1)"
+
+	echo "1..${total}"
+
+	while read -r file; do
+		if [ -z "$(editorconfig "${PWD}/${file}")" ]; then
+			echo "not ok ${counter} - ${file}"
+			((++failures))
+		else
+			echo "ok ${counter} - ${file}"
+			((++successes))
+		fi
+		((++counter))
+	done <"${editorconfig_files}"
+
+	echo "${successes} OK; ${failures} failure(s)".
+
+	if [ "${failures}" -eq 0 ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+main "$@"

@@ -2,15 +2,13 @@
 
 A [Helm](https://helm.sh/) plugin for testing Helm charts with Open Policy Agent, using [conftest](https://github.com/instrumenta/conftest).
 
-
 ## Installation
 
 Install the plugin using the built-in plugin manager.
 
 ```
-helm plugin install https://github.com/instrumenta/helm-conftest
+helm plugin install https://github.com/skillshare/helm-conftest
 ```
-
 
 ## Usage
 
@@ -29,14 +27,4 @@ could set values before validating the chart. eg.
 
 ```
 helm conftest charts/stable/nginx-ingress --set controller.image.tag=latest
-```
-
-
-## Docker
-
-The Helm Conftest plugin is also available as a standalone Docker image. Simply mount your Chart source
-code at `/chart` and include the `policy` dirctory along with your chart and run:
-
-```
-docker run --rm -it -v $(pwd)/snyky:/chart instrumenta/helm-conftest
 ```

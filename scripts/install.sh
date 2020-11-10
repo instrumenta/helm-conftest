@@ -1,41 +1,54 @@
-#! /bin/bash -e
+#!/usr/bin/env bash
 
-cd $HELM_PLUGIN_DIR
-version="$(cat plugin.yaml | grep "version" | cut -d '"' -f 2)"
-echo "Installing helm-conftest v${version} ..."
+set -euo pipefail
 
-unameOut="$(uname -s)"
+main() {
+	pushd "${HELM_PLUGIN_DIR}" >/dev/null
 
-case "${unameOut}" in
-    Linux*)     os=Linux;;
-    Darwin*)    os=Darwin;;
-    *)          os="UNKNOWN:${unameOut}"
-esac
+	version="$(grep "version" plugin.yaml | cut -d '"' -f 2)"
 
-arch=`uname -m`
-url="https://github.com/instrumenta/conftest/releases/download/v${version}/conftest_${version}_${os}_${arch}.tar.gz"
+	echo "Installing helm-conftest v${version} ..."
 
-if [ "$url" = "" ]
-then
-    echo "Unsupported OS / architecture: ${os}_${arch}"
-    exit 1
-fi
+	unameOut="$(uname -s)"
 
-filename=`echo ${url} | sed -e "s/^.*\///g"`
+	case "${unameOut}" in
+	Linux*)
+		os=Linux
+		;;
+	Darwin*)
+		os=Darwin
+		;;
+	*)
+		echo "Unsupported OS: ${unameOut}" 1>&2
+		return 1
+		;;
+	esac
 
-if [ -n $(command -v curl) ]
-then
-    curl -sSL -O $url
-elif [ -n $(command -v wget) ]
-then
-    wget -q $url
-else
-    echo "Need curl or wget"
-    exit -1
-fi
+	arch="$(uname -m)"
+	url="https://github.com/open-policy-agent/conftest/releases/download/v${version}/conftest_${version}_${os}_${arch}.tar.gz"
 
-rm -rf bin && mkdir bin && tar xzvf $filename -C bin > /dev/null && rm -f $filename
+	filename="$(mktemp)"
 
-echo "helm-conftest ${version} is installed."
-echo
-echo "See https://github.com/instrumenta/helm-conftest for help getting started."
+	if command -v curl >/dev/null; then
+		curl --fail -sSL -o "${filename}" "${url}"
+	elif command -v wget >/dev/null; then
+		wget -q -O "${filename}" "${url}"
+	else
+		echo "Need curl or wget" 1>&2
+		return 1
+	fi
+
+	rm -rf bin
+	mkdir bin
+	tar xzf "${filename}" -C bin
+	rm -f "${filename}"
+
+	echo "Checking conftest"
+	bin/conftest --version
+
+	echo "helm-conftest ${version} is installed."
+	echo
+	echo "See https://github.com/skillshare/helm-conftest for help getting started."
+}
+
+main "$@"
