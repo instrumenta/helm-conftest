@@ -14,6 +14,9 @@ helm plugin install https://github.com/skillshare/helm-conftest
 
 Assuming you have policy defined in the `policy` folder, you can point the plugin at your chart.
 
+**NOTE**: Helm takes over the `-n` or `--namespace` option used by
+`confest`. Use `--policy-namespace` instead.
+
 ```
 $ helm conftest .
 FAIL - release-name-mysql must include Kubernetes recommended labels: https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/#labels

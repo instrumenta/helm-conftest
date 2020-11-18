@@ -23,12 +23,17 @@ main() {
 			"${HELM_PLUGIN_DIR}/bin/conftest" test "$1"
 			exit
 			;;
-		--debug | --no-color | --trace | --update | --fail-on-warn)
+		--debug | --no-color | --trace | --update | --fail-on-warn | --combine)
 			conftest_options+=("$1")
 			shift
 			;;
-		--output | -o | --namespace | --policy | -p)
+		--output | -o | --policy | -p)
 			conftest_options+=("$1")
+			conftest_options+=("$2")
+			shift 2
+			;;
+		--policy-namespace)
+			conftest_options+=("--namespace")
 			conftest_options+=("$2")
 			shift 2
 			;;
