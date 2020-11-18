@@ -52,7 +52,7 @@ main() {
 	# mimics the behavior of piping a YAML output stream directly to conftest.
 	find "${output_dir}" -type f \( -iname '*.yml' -o -iname '*.yaml' \) -print0 \
 		| xargs -0 cat \
-		| "${HELM_PLUGIN_DIR}/bin/conftest" test - "${conftest_options[@]}"
+		| "${HELM_PLUGIN_DIR}/bin/conftest" test "${conftest_options[@]}" -
 }
 
 main "$@"
