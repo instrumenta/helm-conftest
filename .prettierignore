@@ -1,3 +1,8 @@
+*.bats
+*.rego
 .editorconfig
 .prettierignore
+.tool-versions
+test/sample
+vendor
 yarn.lock

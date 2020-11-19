@@ -20,7 +20,7 @@ main() {
 	while [ $# -ne 0 ]; do
 		case "$1" in
 		--version | --help)
-			"${HELM_PLUGIN_DIR}/bin/conftest" test "$1"
+			"${HELM_PLUGIN_DIR}/bin/conftest" "$1"
 			exit
 			;;
 		--debug | --no-color | --trace | --update | --fail-on-warn | --combine)
