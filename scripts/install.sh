@@ -2,12 +2,12 @@
 
 set -euo pipefail
 
+declare -r CONFTEST_VERSION=0.22.0
+
 main() {
 	pushd "${HELM_PLUGIN_DIR}" >/dev/null
 
-	version="$(grep "version" plugin.yaml | cut -d '"' -f 2)"
-
-	echo "Installing helm-conftest v${version} ..."
+	echo "Installing helm-conftest v${CONFTEST_VERSION} ..."
 
 	unameOut="$(uname -s)"
 
@@ -25,7 +25,7 @@ main() {
 	esac
 
 	arch="$(uname -m)"
-	url="https://github.com/open-policy-agent/conftest/releases/download/v${version}/conftest_${version}_${os}_${arch}.tar.gz"
+	url="https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_${os}_${arch}.tar.gz"
 
 	filename="$(mktemp)"
 
@@ -46,7 +46,7 @@ main() {
 	echo "Checking conftest"
 	bin/conftest --version
 
-	echo "helm-conftest ${version} is installed."
+	echo "helm-conftest ${CONFTEST_VERSION} is installed."
 	echo
 	echo "See https://github.com/skillshare/helm-conftest for help getting started."
 }
