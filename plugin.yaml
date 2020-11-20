@@ -2,7 +2,7 @@ name: "conftest"
 version: "0.1.2"
 usage: "Test Helm Charts"
 description: |-
-  "Test your Helm Charts with Open Policy Agent"
+  Test your Helm Charts with Open Policy Agent
 command: "$HELM_PLUGIN_DIR/scripts/run.sh"
 
 hooks:
