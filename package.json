@@ -14,7 +14,7 @@
 		"prettier-plugin-sh": "^0.6.0"
 	},
 	"lint-staged": {
-		"{script,scripts}/*": "shellcheck",
+		"{script,scripts}/*": "shellcheck -x",
 		"*": [
 			"script/lint-editorconfig",
 			"prettier --write"

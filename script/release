@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source script/util.sh
+
+main() {
+	local tag="${1:-}"
+
+	if [ -z "${tag}" ]; then
+		log::error "USAGE: ${0} VERSION. Example: ${0} 0.3.5"
+		return 1
+	fi
+
+	if ! echo "${tag}" | grep -qE '[[:digit:]]+\.[[:digit:]]\.[[:digit:]]'; then
+		log::error "${tag} must be a semver version"
+		return 1
+	fi
+
+	if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then
+		log::error "Can only release from master branch"
+		return 1
+	fi
+
+	log::header "Releasing ${tag}"
+	log::indicator "Fetching origin"
+	log::exec_command git fetch origin --no-recurse-submodules
+
+	log::indicator "Checking available tag"
+	if git tag -l | grep -qF "v${tag}"; then
+		log::error "${tag} already exists"
+		return 1
+	fi
+
+	log::indicator "Checking version in plugin.yaml"
+	if [ "$(yq r plugin.yaml version)" = "${tag}" ]; then
+		log::error "${tag} already set in plugin.yaml. Revert before releasing."
+		return 1
+	fi
+
+	log::indicator "Updating plugin.yaml"
+	log::exec_command yq w -i plugin.yaml version "${tag}"
+
+	log::indicator "Generating release commit"
+	log::exec_command git add plugin.yaml
+	log::exec_command git diff --cached
+	log::exec_command git commit -m "feat(release): ${tag}"
+
+	log::indicator "Pushing"
+	log::exec_command git tag "v${tag}"
+	log::exec_command git push
+	log::exec_command git push --tags
+
+	log::success "${tag} released"
+}
+
+main "$@"
