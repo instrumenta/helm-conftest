@@ -1,5 +1,5 @@
 name: "conftest"
-version: "0.1.2"
+version: "0.1.3"
 usage: "Test Helm Charts"
 description: |-
   Test your Helm Charts with Open Policy Agent
