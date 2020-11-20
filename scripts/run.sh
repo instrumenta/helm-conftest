@@ -9,6 +9,10 @@ main() {
 	helm_options=()
 	conftest_options=()
 
+	if "${HELM_BIN}" plugin ls | grep -qF 'secrets-sops-driver'; then
+		helm_options+=(secrets-sops-driver)
+	fi
+
 	if "${HELM_BIN}" plugin ls | grep -qF 'secrets'; then
 		helm_options+=(secrets)
 	fi

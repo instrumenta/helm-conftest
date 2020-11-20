@@ -95,6 +95,21 @@ setup() {
 	assert [ "${lines[5]}" = "bar" ]
 }
 
+@test "uses the secrets-sops-driver plugin if available" {
+	run env HELM_PLUGINS="secrets secrets-sops-driver" scripts/run.sh
+	assert_success
+
+	assert [ "${lines[0]}" = "secrets-sops-driver" ]
+	assert [ "${lines[1]}" = "secrets" ]
+	assert [ "${lines[2]}" = "template" ]
+	assert [ "${lines[3]}" = "--generate-name" ]
+	assert [ "${lines[4]}" = "--output-dir" ]
+	assert [ -d "${lines[5]}" ]
+
+	assert [ "${lines[6]}" = "test" ]
+	assert [ "${lines[7]}" = "-" ]
+}
+
 @test "uses the secrets plugin if available" {
 	run env HELM_PLUGINS=secrets scripts/run.sh
 	assert_success
@@ -107,5 +122,4 @@ setup() {
 
 	assert [ "${lines[5]}" = "test" ]
 	assert [ "${lines[6]}" = "-" ]
-
 }
