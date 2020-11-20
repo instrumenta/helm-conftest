@@ -27,7 +27,7 @@ main() {
 			conftest_options+=("$1")
 			shift
 			;;
-		--output | -o | --policy | -p)
+		--output | -o | --policy | -p | -d | --data)
 			conftest_options+=("$1")
 			conftest_options+=("$2")
 			shift 2

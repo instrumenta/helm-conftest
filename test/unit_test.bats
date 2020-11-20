@@ -54,7 +54,7 @@ setup() {
 }
 
 @test "conftest option value forwarding" {
-	local -a options=(--output -o --policy -p)
+	local -a options=(--output -o --policy -p -d --data)
 
 	for option in "${options[@]}"; do
 		run scripts/run.sh "${option}" dummy
