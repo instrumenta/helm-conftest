@@ -46,7 +46,7 @@ main() {
 	echo "Checking conftest"
 	bin/conftest --version
 
-	echo "helm-conftest ${CONFTEST_VERSION} is installed."
+	echo "conftest ${CONFTEST_VERSION} is installed."
 	echo
 	echo "See https://github.com/skillshare/helm-conftest for help getting started."
 }
