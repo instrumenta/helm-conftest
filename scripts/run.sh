@@ -18,7 +18,7 @@ do
                 conftest_options+=("$1")
                 shift
                 ;;
-            --output|-o|--namespace|--policy|-p)
+            --output|-o|--namespace|--policy|-p|--data|-d)
                 conftest_options+=("$1")
                 conftest_options+=("$2")
                 shift 2
