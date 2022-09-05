@@ -13,7 +13,7 @@ case "${unameOut}" in
 esac
 
 arch=`uname -m`
-url="https://github.com/instrumenta/conftest/releases/download/v${version}/conftest_${version}_${os}_${arch}.tar.gz"
+url="https://github.com/open-policy-agent/conftest/releases/v${version}/conftest_${version}_${os}_${arch}.tar.gz"
 
 if [ "$url" = "" ]
 then
@@ -38,4 +38,4 @@ rm -rf bin && mkdir bin && tar xzvf $filename -C bin > /dev/null && rm -f $filen
 
 echo "helm-conftest ${version} is installed."
 echo
-echo "See https://github.com/instrumenta/helm-conftest for help getting started."
+echo "See https://github.com/baldey-nz/helm-conftest for help getting started."
